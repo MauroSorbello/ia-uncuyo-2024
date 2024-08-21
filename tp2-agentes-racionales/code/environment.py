@@ -55,7 +55,7 @@ class Environment:
          
     def get_performance(self):
         performance = self.cleaned_celds
-        return (performance,self.dirty_celds)
+        return (performance)
 
     def print_environment(self):
         for y in range(self.sizeY):
