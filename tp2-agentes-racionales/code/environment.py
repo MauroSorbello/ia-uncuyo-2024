@@ -3,7 +3,9 @@ import random
 class Environment:
     #init_posX,init_posY,
     #Quite la posicion inicial a environment, dado a que esta va cuando se inicializa el cliente
-    def __init__(self,sizeX,sizeY,dirt_rate):
+    def __init__(self,sizeX,sizeY,dirt_rate, seed=None):
+        if seed != None:
+            random.seed(seed)
         self.sizeX = sizeX
         self.sizeY = sizeY
         #Crear matriz environment
@@ -55,7 +57,10 @@ class Environment:
          
     def get_performance(self):
         performance = self.cleaned_celds
-        return (performance,self.dirty_celds)
+        return performance
+    
+    def get_dirty_selds(self):
+        return self.dirty_celds
 
     def print_environment(self):
         for y in range(self.sizeY):

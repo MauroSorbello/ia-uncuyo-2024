@@ -1,8 +1,10 @@
 import random
 
 class Agent:
-    def __init__(self, env):
+    def __init__(self, env, seed):
         #Inicializo su posicion
+        if seed != None:
+            random.seed(seed)
         self.env = env
         self.posX = random.randint(0, self.env.sizeX-1)
         self.posY = random.randint(0, self.env.sizeY-1)

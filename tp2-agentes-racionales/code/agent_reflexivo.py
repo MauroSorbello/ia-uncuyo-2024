@@ -1,9 +1,9 @@
 import random
 import agent
 class Agent_reflexivo(agent.Agent):
-    def __init__(self,env):
+    def __init__(self,env, seed):
         # Llamada al constructor de la clase base
-        super().__init__(env)
+        super().__init__(env, seed)
     def idle(self): # no hace nada
         self.mov = self.mov
         return
