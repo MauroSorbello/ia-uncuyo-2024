@@ -28,17 +28,21 @@ Para cada combinacion de porcentaje de suciedad y cantidad de celdas nxn, se gen
 
 ## Análisis de resultados
 Para visualizar y analizar los resultados obtenidos, estos fueron graficados según el promedio de celdas limpiadas con tasa de suciedad de 0.1, obtenido a partir de la división de la suma de todos los desempeños obtenidos en los 10 entornos, entre la cantidad de entornos (10). 
+
 ![Promedio de celdas limpiadas con tasa de suciedad de 0.1](images/1.png)
 ![Promedio de celdas limpiadas con tasa de suciedad de 0.2](images/2.png)
 ![Promedio de celdas limpiadas con tasa de suciedad de 0.4](images/3.png)
 ![Promedio de celdas limpiadas con tasa de suciedad de 0.8](images/4.png)
+
 Se puede observar cómo en entornos con pequeña dimensión, los dos agentes no difieren en el promedio de celdas limpiadas, en cambio, cuando las dimensiones aumentan, la diferencia entre los dos agentes es notables, se puede visualizar una amplia ventaja del agente reflexivo simple en comparación al agente con comportamiento completamente aleatorio. 
 
 Luego fueron graficados respecto a la Tasa de acierto de barrido con tasa de suciedad de 0.1, esta se obtiene a partir de la división la suma de todos los desempeños (celdas limpiadas) obtenidos en los 10 entornos, entre la cantidad de celdas por limpiar. 
+
 ![Tasa de acierto de barrido con tasa de suciedad de 0.1](images/5.png)
 ![Tasa de acierto de barrido con tasa de suciedad de 0.2](images/6.png)
 ![Tasa de acierto de barrido con tasa de suciedad de 0.4](images/7.png)
 ![Tasa de acierto de barrido con tasa de suciedad de 0.8](images/8.png)
+
 Se puede observar lo mismo que en la anterior medición, y además, se encuentra que la máxima diferencia en la tasa de acierto de barrido entre los dos agentes es cuando el entorno es de dimensión 16 x 16. Que en 8 x 8 y 32 x 32, las diferencias entre los agentes de la tasa de acierto de barrido es prácticamente la misma. 
 
 Por último, que a partir de 32 x 32 la diferencia en la tasa de acierto comienza a disminuir, pero que el agente reflexivo simple siempre mantiene una ventaja respecto al otro agente. 
