@@ -1,3 +1,5 @@
+# AIMA QUESTIONS
+
 ## 2.10 
 
 a) ¿Puede un agente simple reflexivo ser perfectamente racional para este entorno? Explicar. 
