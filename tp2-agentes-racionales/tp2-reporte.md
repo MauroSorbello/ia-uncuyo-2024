@@ -34,6 +34,7 @@ Para visualizar y analizar los resultados obtenidos, estos fueron graficados seg
 ![Promedio de celdas limpiadas con tasa de suciedad de 0.4](images/3.png)
 ![Promedio de celdas limpiadas con tasa de suciedad de 0.8](images/4.png)
 
+
 Se puede observar cómo en entornos con pequeña dimensión, los dos agentes no difieren en el promedio de celdas limpiadas, en cambio, cuando las dimensiones aumentan, la diferencia entre los dos agentes es notables, se puede visualizar una amplia ventaja del agente reflexivo simple en comparación al agente con comportamiento completamente aleatorio. 
 
 Luego fueron graficados respecto a la Tasa de acierto de barrido con tasa de suciedad de 0.1, esta se obtiene a partir de la división la suma de todos los desempeños (celdas limpiadas) obtenidos en los 10 entornos, entre la cantidad de celdas por limpiar. 
