@@ -32,5 +32,5 @@ def generate_random_map_custom(size_desc, hole_prob, seed = None, slippery = Fal
     env = gym.make("FrozenLake-v1", desc=desc, render_mode="human", is_slippery = slippery)
     return env, desc
 
-env, desc = generate_random_map_custom(4, 0.5, 2)
-print(desc)
+# env, desc = generate_random_map_custom(4, 0.5, 2)
+# print(desc)
