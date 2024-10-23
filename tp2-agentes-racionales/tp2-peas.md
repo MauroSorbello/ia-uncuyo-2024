@@ -31,4 +31,14 @@ d) Practicar tenis contra una pared.
 
 e) Realizar un salto de altura.
 
-f) Pujar por un art´ıculo en una subasta.
+    - Performance: Saltar desde la altura mas alta posible, durar tiempo en el aire.
+    - Entorno: Plataforma de salto.
+    - Actuadores: Piernas, brazo, torso, cadera, entre otros.
+    - Sensores: Sensores de proximidad, camaras, sensores de profundidad, de fuerza, de movimiento.
+
+f) Pujar por un artículo en una subasta.
+
+    - Performance: Cantidad de articulos comprados, precio de compra, ganancias generadas, pujas ganadas a un buen precio.
+    - Entorno: Subasta, articulos de la subasta, precios iniciales, cantidad de subastadores.
+    - Actuadores: Parlante / pantalla de visualización.
+    - Sensores: Valor real de los articulos subastados en el mercado, detalles, detección para no subir mas la subasta.
