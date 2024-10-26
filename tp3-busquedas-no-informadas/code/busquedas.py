@@ -1,6 +1,8 @@
-
-import numpy as np
+import heapq
+import random
 import generate_random_map_custom 
+
+
 def choose_action(x,y,len_desc):
     action = []
     if x != 0: action.append(0)
@@ -23,8 +25,9 @@ def action(num, node):
 def bfs(env):
     desc = env.unwrapped.desc
     desc_str = [[cell.decode('utf-8') for cell in row] for row in desc]
-    print(desc_str)
+    # print(desc_str)
     # Crear la cola FIFO de frontera usando deque
+    acts = []
     frontier = []
     explored = set()
     len_desc = len(desc)
@@ -40,9 +43,9 @@ def bfs(env):
     while check == False:
         if len(frontier) == 0:
             break
-        print(frontier)
+        # print(frontier)
         node = frontier.pop(0)
-        print(frontier)
+        # print(frontier)
         explored.add(node)
         # Devuelve las posibles acciones
         actions = choose_action(node[0], node[1], len_desc)
@@ -50,36 +53,40 @@ def bfs(env):
             child_node = action(act, node)
             if desc_str[child_node[0]][child_node[1]] != "H":
                 if (child_node not in explored) and (child_node not in frontier):
-                    parent[child_node]=node
+                    parent[child_node] = (node, act)
                     if desc_str[child_node[0]][child_node[1]] == "G":
-                        print(child_node)
+                        # print(child_node)
                         solution = child_node
                         check = True
                         break
                     else:
                         frontier.append(child_node)
     if solution == None:
-        return False
+        return None
     else:
         path = []
+        acts = []
         sol = solution
         while sol is not None:
-            if sol == None:
-                break
             path.append(sol)
-            sol = parent[sol]
-        path.reverse()  
-        return solution, path
+            if parent[sol] is not None:
+                sol, action_taken = parent[sol]
+                acts.append(action_taken)  # Agregar la acción al camino
+            else:
+                sol = None
+        path.reverse()
+        return solution, path, acts
 
 def dfs(env):
     desc = env.unwrapped.desc
     desc_str = [[cell.decode('utf-8') for cell in row] for row in desc]
-    print(desc_str)
+    # print(desc_str)
     # Crear la cola LIFO de frontera usando deque
     frontier = []
     explored = set()
     len_desc = len(desc)
     parent = {}
+    acts = []
     # Busco el S: Start
     for i in range (len_desc):
         for j in range (len_desc):
@@ -91,9 +98,9 @@ def dfs(env):
     while check == False:
         if len(frontier) == 0:
             break
-        print(frontier)
+        # print(frontier)
         node = frontier.pop()
-        print(frontier)
+        # print(frontier)
         explored.add(node)
         # Devuelve las posibles acciones
         actions = choose_action(node[0], node[1], len_desc)
@@ -101,32 +108,35 @@ def dfs(env):
             child_node = action(act, node)
             if desc_str[child_node[0]][child_node[1]] != "H":
                 if (child_node not in explored) and (child_node not in frontier):
-                    parent[child_node]=node
+                    parent[child_node] = (node, act)
                     if desc_str[child_node[0]][child_node[1]] == "G":
-                        print(child_node)
+                        # print(child_node)
                         solution = child_node
                         check = True
                         break
                     else:
                         frontier.append(child_node)
     if solution == None:
-        return False
+        return None
     else:
         path = []
+        acts = []
         sol = solution
         while sol is not None:
-            if sol == None:
-                break
             path.append(sol)
-            sol = parent[sol]
-        path.reverse()  
-        return solution, path
+            if parent[sol] is not None:
+                sol, action_taken = parent[sol]
+                acts.append(action_taken)  # Agregar la acción al camino
+            else:
+                sol = None
+        path.reverse()
+        return solution, path, acts
 
 # depth limited search
 def dls(env,limit): 
     desc = env.unwrapped.desc
     desc_str = [[cell.decode('utf-8') for cell in row] for row in desc]
-    print(desc_str)
+    # print(desc_str)
     # Crear la cola LIFO de frontera usando deque
     frontier = []
     explored = set()
@@ -143,9 +153,9 @@ def dls(env,limit):
     while check == False:
         if len(frontier) == 0:
             break
-        print(frontier)
+        # print(frontier)
         node = frontier.pop()
-        print(frontier)
+        # print(frontier)
         explored.add(node)
         # Devuelve las posibles acciones
         actions = choose_action(node[0], node[1], len_desc)
@@ -156,14 +166,14 @@ def dls(env,limit):
                     if (parent_profundidad[node][1] + 1) <= limit:
                         parent_profundidad[child_node]=(node,parent_profundidad[node][1] + 1)
                         if desc_str[child_node[0]][child_node[1]] == "G":
-                            print(child_node)
+                            # print(child_node)
                             solution = child_node
                             check = True
                             break
                         else:
                             frontier.append(child_node)
     if solution == None:
-        return False
+        return None
     else:
         path = []
         sol = solution
@@ -178,73 +188,140 @@ def dls(env,limit):
 def uniform_cost(env, cost):
     desc = env.unwrapped.desc
     desc_str = [[cell.decode('utf-8') for cell in row] for row in desc]
-    # Crear la cola FIFO de frontera usando deque
+
+    # Crear la cola de prioridad de frontera usando heapq
     frontier = []
     explored = set()
     len_desc = len(desc)
     parent_priority = {}
-    # Busco el S: Start y el goal G
-    for i in range (len_desc):
-        for j in range (len_desc):
+
+    # Buscar el punto de inicio "S" y el punto objetivo "G"
+    for i in range(len_desc):
+        for j in range(len_desc):
             if desc_str[i][j] == "S":
-                frontier.append((0, (i,j)))
-                parent_priority[(i,j)] = (None,0)
+                heapq.heappush(frontier, (0, (i, j)))  # Prioridad inicial 0
+                parent_priority[(i, j)] = (None, 0)
+
     check = False
-    while check == False:
-        if len(frontier) == 0:
+    solution = None
+
+    while not check:
+        if not frontier:
             break
-        priority, node = frontier.pop()
+
+        # Extraemos el nodo con menor costo acumulado (heap)
+        priority, node = heapq.heappop(frontier)
+        # Si llegamos al objetivo, terminamos
         if desc_str[node[0]][node[1]] == "G":
-            print(node)
             solution = node
             check = True
             break
+
         explored.add(node)
-        # Devuelve las posibles acciones
         actions = choose_action(node[0], node[1], len_desc)
+
         for act in actions:
             child_node = action(act, node)
-            # Comprobar si está dentro de los límites y no es una 'H' (obstáculo)
+
+            # Verificar si el nodo hijo está dentro de los límites y no es obstáculo
             if 0 <= child_node[0] < len_desc and 0 <= child_node[1] < len(desc_str[0]):
-                if desc_str[child_node[0]][child_node[1]] != "H":
-                    #Calculamos el costo:
+                if desc_str[child_node[0]][child_node[1]] != "H":  # No es obstáculo
+                    # Calcular el costo:
                     if cost == 0:
+                        # Si el costo es constante, sumar 1 por cada movimiento
                         child_priority = priority + 1
                     else:
-                        child_priority = priority + act + 1
-                    if (child_node not in explored) and (child_node not in frontier):
-                        frontier.append((0, child_node))
+                        # Asignar un costo diferente basado en la dirección (act)
+                        if act == 0:  # Arriba
+                            move_cost = 2
+                        elif act == 1:  # Abajo
+                            move_cost = 1
+                        elif act == 2:  # Izquierda
+                            move_cost = 3
+                        elif act == 3:  # Derecha
+                            move_cost = 1
+
+                        child_priority = priority + move_cost
+
+                    # Si el nodo hijo no está explorado o encontramos un mejor costo, lo añadimos a la frontera
+                    if child_node not in explored and all(child_node != f[1] for f in frontier):
+                        heapq.heappush(frontier, (child_priority, child_node))
                         parent_priority[child_node] = (node, child_priority)
-                    elif parent_priority[child_node][1] > child_priority:
-                        i = 0
-                        # Buscamos el nodo en la frontera
-                        for n in frontier:
-                            i += 1
-                            if n[1] == child_node:
-                                priority_new , elem = frontier[i-1]
-                                if priority_new > priority:
-                                    frontier.pop([i-1])
-                                    frontier.append((child_priority, child_node))
-                                    parent_priority[child_node] = (node, child_priority) 
-                    parent = parent_priority[child_node][0]
-                    parent_priority[child_node] = (parent, child_priority)   
-    if solution == None:
-        return False
+                    elif child_node in parent_priority and parent_priority[child_node][1] > child_priority:
+                        # Actualizamos la prioridad del nodo si encontramos un mejor costo
+                        parent_priority[child_node] = (node, child_priority)
+                        heapq.heappush(frontier, (child_priority, child_node))
+
+    if solution is None:
+        return None
     else:
-        print(parent_priority)
+        # Reconstruir el camino de solución
+        path = []
+        sol = solution
+        total_cost = parent_priority[sol][1] 
+        while sol is not None:
+            path.append(sol)
+
+             # Actualiza el costo total acumulado
+            sol = parent_priority[sol][0]
+
+        path.reverse()
+        return solution, path, total_cost
+
+def aleatorio(env):
+    desc = env.unwrapped.desc
+    desc_str = [[cell.decode('utf-8') for cell in row] for row in desc]
+    # print(desc_str)
+    # Crear la cola FIFO de frontera usando deque
+    frontier = []
+    explored = set()
+    len_desc = len(desc)
+    parent = {}
+    # Busco el S: Start
+    for i in range (len_desc):
+        for j in range (len_desc):
+            if desc_str[i][j] == "S":
+                frontier.append((i,j))
+                parent[(i,j)] = None
+    check = False
+    solution = None
+    step = 0
+    while check == False:
+        if len(frontier) == 0:
+            break
+        # print(frontier)
+        node = frontier.pop(0)
+        # print(frontier)
+        explored.add(node)
+        # Devuelve las posibles acciones
+        act = random.randint(0,3)
+        child_node = action(act, node)
+        step = step + 1
+        if desc_str[child_node[0]][child_node[1]] != "H":
+            parent[child_node]=node
+            if desc_str[child_node[0]][child_node[1]] == "G":
+                solution = child_node
+                check = True
+                break
+            else:
+                frontier.append(child_node)
+        else: 
+            return None
+        if step == 1000:
+            return None
+    if solution == None:
+        return None
+    else:
         path = []
         sol = solution
         while sol is not None:
             if sol == None:
                 break
             path.append(sol)
-            sol = parent_priority[sol][0]
+            sol = parent[sol]
         path.reverse()  
         return solution, path
 
-
-    
-    return solution, path
                 
 
 # Para problemas en una cuadrícula, como un laberinto donde solo puedes moverte en líneas rectas 
@@ -258,75 +335,73 @@ def heuristic(node, goal):
 def a_star(env, cost):
     desc = env.unwrapped.desc
     desc_str = [[cell.decode('utf-8') for cell in row] for row in desc]
-    # Crear la cola FIFO de frontera usando deque
+
+    # Crear la cola de prioridad de frontera usando heapq
     frontier = []
     explored = set()
     len_desc = len(desc)
     parent_priority = {}
-    # Busco el S: Start y el goal G
-    for i in range (len_desc):
-        for j in range (len_desc):
+
+    # Buscar el punto de inicio "S" y el punto objetivo "G"
+    goal = None
+    for i in range(len_desc):
+        for j in range(len_desc):
             if desc_str[i][j] == "S":
-                frontier.append((0, (i,j)))
-                parent_priority[(i,j)] = (None,0)
+                heapq.heappush(frontier, (0, (i, j)))  # Prioridad inicial 0
+                parent_priority[(i, j)] = (None, 0)
             if desc_str[i][j] == "G":
-                goal = (i,j)
+                goal = (i, j)
+
     check = False
-    while check == False:
-        if len(frontier) == 0:
+    solution = None
+
+    while not check:
+        if not frontier:
             break
-        priority, node = frontier.pop()
+
+        priority, node = heapq.heappop(frontier)  # Extraemos el nodo con menor costo
+
         if desc_str[node[0]][node[1]] == "G":
-            print(node)
             solution = node
             check = True
             break
+
         explored.add(node)
-        # Devuelve las posibles acciones
         actions = choose_action(node[0], node[1], len_desc)
+
         for act in actions:
             child_node = action(act, node)
-            # Comprobar si está dentro de los límites y no es una 'H' (obstáculo)
+
             if 0 <= child_node[0] < len_desc and 0 <= child_node[1] < len(desc_str[0]):
-                if desc_str[child_node[0]][child_node[1]] != "H":
-                    #Calculamos el costo:
+                if desc_str[child_node[0]][child_node[1]] != "H":  # Verificar si es un obstáculo
+                    # Cálculo del costo g
                     if cost == 0:
-                        child_priority = priority + heuristic(child_node, goal)
+                        g_cost = parent_priority[node][1] + 1  # Si cost == 0, costo uniforme
                     else:
-                        child_priority = priority + act + heuristic(child_node, goal)
-                    if (child_node not in explored) and (child_node not in frontier):
-                        frontier.append((0, child_node))
-                        parent_priority[child_node] = (node, child_priority)
-                    elif parent_priority[child_node][1] > child_priority:
-                        i = 0
-                        # Buscamos el nodo en la frontera
-                        for n in frontier:
-                            i += 1
-                            if n[1] == child_node:
-                                priority_new , elem = frontier[i-1]
-                                if priority_new > priority:
-                                    frontier.pop([i-1])
-                                    frontier.append((child_priority, child_node))
-                                    parent_priority[child_node] = (node, child_priority) 
-                    parent = parent_priority[child_node][0]
-                    parent_priority[child_node] = (parent, child_priority)   
-    if solution == None:
+                        g_cost = parent_priority[node][1] + 1  # Aquí puedes ajustar el costo dinámico si es necesario
+
+                    # Cálculo del costo f
+                    f_cost = g_cost + heuristic(child_node, goal)
+
+                    # Si el nodo hijo no está explorado y no está en la frontera, o si encontramos un mejor costo
+                    if child_node not in explored and all(child_node != f[1] for f in frontier):
+                        heapq.heappush(frontier, (f_cost, child_node))
+                        parent_priority[child_node] = (node, g_cost)
+                    elif child_node in parent_priority and parent_priority[child_node][1] > g_cost:
+                        # Si encontramos un mejor camino a este nodo, actualizamos la prioridad
+                        parent_priority[child_node] = (node, g_cost)
+                        heapq.heappush(frontier, (f_cost, child_node))
+
+    if solution is None:
         return False
     else:
-        print(parent_priority)
+        # Reconstruir el camino de solución
         path = []
         sol = solution
+        total_cost = parent_priority[sol][1]
         while sol is not None:
-            if sol == None:
-                break
             path.append(sol)
             sol = parent_priority[sol][0]
-        path.reverse()  
-        return solution, path
-    
-env, desc = generate_random_map_custom.generate_random_map_custom(4, 0.4, 7)
-print(desc)
 
-recorrido = a_star(env,1)
-print(recorrido)
-
+        path.reverse()
+        return solution, path, total_cost
