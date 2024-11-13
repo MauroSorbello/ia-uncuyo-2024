@@ -7,6 +7,7 @@ a) Jugar al CS (o cualquier otro 3d Shooter).
     - Entorno: Mapa, obstaculos dentro del mapa, enemigos y aliados.
     - Actuadores: Manejo del personaje (movimiento del personaje), apuntar, disparar y todos los movimientos permitidos.
     - Sensores: Sonido, minimapa, linea de vision (detectar enemigos), detectar obstaculos, coberturas, entre otras.
+    - Descripción del entorno: Parcialmente observable, no determinista, secuencial, dinámico, multi-agente, continuo.
 
 b) Explorar los oceanos.
     
@@ -14,6 +15,7 @@ b) Explorar los oceanos.
     - Entorno: Oceano, animales marinos, piedras, vegetación.
     - Actuadores: Manejo de motores, brazos mecanicos, luces y camaras.
     - Sensores: Sensores de proximidad, camaras, GPS, luces, sensores de profundidad, acelerometros, barometros, entre otros.
+    - Descripción del entorno: Parcialmente observable, no determinista, secuencial, dinámico, multi-agente, continuo.
 
 c) Comprar y vender tokens crypto (alguno).
     
@@ -21,6 +23,7 @@ c) Comprar y vender tokens crypto (alguno).
     - Entorno: Wallets, blockchain, regulaciones nacionales, exchanges.
     - Actuadores: Realización de compra y venta de tokens, gestion de wallets, estrategias de trading.
     - Sensores: Subida y bajada del valor de los tokens, stoploss, analisis de mercado, analisis de historicos para predecir futuras compras o ventas. 
+    - Descripción del entorno: Parcialmente observable, no determinista, secuencial, dinámico, multi-agente, mixto.
 
 d) Practicar tenis contra una pared.
     
@@ -28,6 +31,7 @@ d) Practicar tenis contra una pared.
     - Entorno: Cancha, red limite, pared.
     - Actuadores: Manejo de la raqueta, manejo del jugador (movimiento), manejo de la fuerza de golpeo y punteria.
     - Sensores: Sensores de proximidad, camaras, sensores de profundidad, de fuerza, de movimiento.
+    - Descripción del entorno: Totalmente observable o parcial (depende de la forma de visión), determinista, secuencial, dinámico, agente único, continuo.
 
 e) Realizar un salto de altura.
 
@@ -35,6 +39,7 @@ e) Realizar un salto de altura.
     - Entorno: Plataforma de salto.
     - Actuadores: Piernas, brazo, torso, cadera, entre otros.
     - Sensores: Sensores de proximidad, camaras, sensores de profundidad, de fuerza, de movimiento.
+    - Descripción del entorno: Totalmente observable, determinista, secuencial, estático, agente único, continuo.
 
 f) Pujar por un artículo en una subasta.
 
@@ -42,3 +47,4 @@ f) Pujar por un artículo en una subasta.
     - Entorno: Subasta, articulos de la subasta, precios iniciales, cantidad de subastadores.
     - Actuadores: Parlante / pantalla de visualización.
     - Sensores: Valor real de los articulos subastados en el mercado, detalles, detección para no subir mas la subasta.
+    - Descripción del entorno: Parcialmente observable, no determinista, secuencial, dinámico, multi-agente, discreto.
